@@ -38,6 +38,8 @@ class etcd (
   $discovery               = $etcd::params::etcd_discovery,
   $discovery_endpoint      = $etcd::params::etcd_discovery_endpoint,
   $discovery_token         = $etcd::params::etcd_discovery_token,
+  $discovery_srv           = $etcd::params::etcd_discovery_srv,
+  $discovery_srv_record    = $etcd::params::etcd_discovery_srv_record,
   $peers                   = $etcd::params::etcd_peers,
   $peers_file              = $etcd::params::etcd_peers_file,
   $max_result_buffer       = $etcd::params::etcd_max_result_buffer,
@@ -67,6 +69,10 @@ class etcd (
   # If using discovery, should have a valid discovery token
   if ($discovery and $discovery_token == '') {
     fail('Invalid discovery token specified')
+  }
+  # If using discover-srv, should have a valid discover srv record
+  if ($discovery_srv and $discovery_srv_record == '') {
+    fail('Invalid discovery src record specified')
   }
 
   # Validate other params

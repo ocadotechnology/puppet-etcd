@@ -32,7 +32,7 @@ class etcd::params {
 
   # Node settings
   $etcd_node_name               = $::fqdn
-  $etcd_addr                    = "${::fqdn}:4001"
+  $etcd_addr                    = "${::fqdn}:2379"
   $etcd_bind_addr               = $etcd_addr
   $etcd_ca_file                 = ''
   $etcd_cert_file               = ''
@@ -44,9 +44,11 @@ class etcd::params {
   $etcd_discovery               = false
   $etcd_discovery_endpoint      = 'https://discovery.etcd.io/'
   $etcd_discovery_token         = ''
+  $etcd_discovery_srv           = false
+  $etcd_discovery_srv_record    = ''
 
   # Peer settings
-  $etcd_peer_addr               = "${::fqdn}:7001"
+  $etcd_peer_addr               = "${::fqdn}:2380"
   $etcd_peer_bind_addr          = $etcd_peer_addr
   $etcd_peers                   = []
   $etcd_peers_file              = undef
