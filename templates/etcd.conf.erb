@@ -14,7 +14,7 @@ ETCD_MAX_WALS="<%= @max_wals -%>"
 ETCD_CORS="<%= @cors.join('","') -%>"
 
 ETCD_# Cluster flags:
-ETCD_INITIAL_ADVERTISE_PEER_URLS="<%= @cluster_peer_url.join('","') -%>"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="<%= @initial_advertise_peer_urls.join('","') -%>"
 ETCD_INITIAL_CLUSTER="<%= @initial_cluster.join('","') -%>"
 ETCD_INITIAL_CLUSTER_STATE="<%= @cluster_state -%>"
 ETCD_INITIAL_CLUSTER_TOKEN="<%= @cluster_token -%>"
