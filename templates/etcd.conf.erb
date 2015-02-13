@@ -18,7 +18,7 @@ ETCD_INITIAL_ADVERTISE_PEER_URLS="<%= @initial_advertise_peer_urls.join('","') -
 ETCD_INITIAL_CLUSTER="<%= @initial_cluster.join('","') -%>"
 ETCD_INITIAL_CLUSTER_STATE="<%= @cluster_state -%>"
 ETCD_INITIAL_CLUSTER_TOKEN="<%= @cluster_token -%>"
-ETCD_ADVERTISE_CLIENT_URLS="<%= @cluster_client_url.join('","') -%>"
+ETCD_ADVERTISE_CLIENT_URLS="<%= @advertise_client_urls.join('","') -%>"
 
 # Discovery flags
 <% if @discovery_srv == 'url' -%>
