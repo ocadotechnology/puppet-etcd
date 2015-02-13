@@ -64,7 +64,7 @@ class etcd (
   # Select cluster type
   #
   # We need a cluster token:
-  validate_sring($initial_cluster_token)
+  validate_string($initial_cluster_token)
 
   # if we are not a proxy
   case $discovery {
