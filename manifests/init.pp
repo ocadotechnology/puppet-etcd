@@ -74,12 +74,12 @@ class etcd (
       if ($discovery_srv_record == '') {
         fail('Invalid discovery srv record specified')
       }
-      $use_dns_discovery = true,
+      $use_dns_discovery = true
     }
     # Static cluster
     'initial-cluster': {
       validate_array($initial_cluster)
-      $use_static_discover = true,
+      $use_static_discover = true
     }
     # Default, discovery url (public and custom)
     'default': {
@@ -87,7 +87,7 @@ class etcd (
       if ($discovery_endpoint == '') {
         fail('Invalid discovery endpoint specified')
       }
-      $use_url_discovery = true,
+      $use_url_discovery = true
     }
   }
 
