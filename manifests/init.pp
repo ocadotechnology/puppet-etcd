@@ -45,7 +45,7 @@ class etcd (
   $cors                        = $etcd::params::etcd_cors,
 
   $initial_advertise_peer_urls = $etcd::params::etcd_initial_advertise_peer_urls,
-  $initial_cluster             = $etcd::params::$etcd_initial_cluster,
+  $initial_cluster             = $etcd::params::etcd_initial_cluster,
   $initial_cluster_token       = $etcd::params::etcd_initial_cluster_token,
   $advertise_client_urls       = $etcd::params::etcd_advertise_client_urls,
 
