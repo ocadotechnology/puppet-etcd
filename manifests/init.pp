@@ -15,64 +15,80 @@
 # Gavin Williams <fatmcgav@gmail.com>
 #
 class etcd (
-  $service_ensure          = $etcd::params::etcd_service_ensure,
-  $service_enable          = $etcd::params::etcd_service_enable,
-  $manage_service_file     = $etcd::params::etcd_manage_service_file,
-  $package_ensure          = $etcd::params::etcd_package_ensure,
-  $package_name            = $etcd::params::etcd_package_name,
-  $binary_location         = $etcd::params::etcd_binary_location,
-  $manage_user             = $etcd::params::etcd_manage_user,
-  $user                    = $etcd::params::etcd_user,
-  $group                   = $etcd::params::etcd_group,
-  $addr                    = $etcd::params::etcd_addr,
-  $bind_addr               = $etcd::params::etcd_bind_addr,
-  $ca_file                 = $etcd::params::etcd_ca_file,
-  $cert_file               = $etcd::params::etcd_cert_file,
-  $key_file                = $etcd::params::etcd_key_file,
-  $cors                    = $etcd::params::etcd_cors,
-  $cpu_profile_file        = $etcd::params::etcd_cpu_profile_file,
-  $manage_data_dir         = $etcd::params::etcd_manage_data_dir,
-  $data_dir                = $etcd::params::etcd_data_dir,
-  $manage_log_dir          = $etcd::params::etcd_manage_log_dir,
-  $log_dir                 = $etcd::params::etcd_log_dir,
-  $discovery               = $etcd::params::etcd_discovery,
-  $discovery_endpoint      = $etcd::params::etcd_discovery_endpoint,
-  $discovery_token         = $etcd::params::etcd_discovery_token,
-  $discovery_srv           = $etcd::params::etcd_discovery_srv,
-  $discovery_srv_record    = $etcd::params::etcd_discovery_srv_record,
-  $peers                   = $etcd::params::etcd_peers,
-  $peers_file              = $etcd::params::etcd_peers_file,
-  $max_result_buffer       = $etcd::params::etcd_max_result_buffer,
-  $max_retry_attempts      = $etcd::params::etcd_max_retry_attempts,
-  $node_name               = $etcd::params::etcd_node_name,
-  $snapshot                = $etcd::params::etcd_snapshot,
-  $snapshot_count          = $etcd::params::etcd_snapshot_count,
-  $verbose                 = $etcd::params::etcd_verbose,
-  $very_verbose            = $etcd::params::etcd_very_verbose,
-  $peer_election_timeout   = $etcd::params::etcd_peer_election_timeout,
-  $peer_heartbeat_interval = $etcd::params::etcd_peer_heartbeat_interval,
-  $peer_addr               = $etcd::params::etcd_peer_addr,
-  $peer_bind_addr          = $etcd::params::etcd_peer_bind_addr,
-  $peer_ca_file            = $etcd::params::etcd_peer_ca_file,
-  $peer_cert_File          = $etcd::params::etcd_peer_cert_File,
-  $peer_key_file           = $etcd::params::etcd_peer_key_file,
-  $cluster_active_size     = $etcd::params::etcd_cluster_active_state,
-  $cluster_remove_delay    = $etcd::params::etcd_cluster_remove_delay,
-  $cluster_sync_interval   = $etcd::params::etcd_cluster_sync_interval) inherits etcd::params {
+  $binary_location             = $etcd::params::etcd_binary_location,
 
-  # Discovery settings
-  validate_bool($discovery)
-  # If not using discovery, should have a valid list of peers
-  if (!$discovery) {
-    validate_array($peers)
-  }
-  # If using discovery, should have a valid discovery token
-  if ($discovery and $discovery_token == '') {
-    fail('Invalid discovery token specified')
-  }
-  # If using discover-srv, should have a valid discover srv record
-  if ($discovery_srv and $discovery_srv_record == '') {
-    fail('Invalid discovery src record specified')
+  $service_ensure              = $etcd::params::etcd_service_ensure,
+  $service_enable              = $etcd::params::etcd_service_enable,
+  $manage_service_file         = $etcd::params::etcd_manage_service_file,
+
+  $package_ensure              = $etcd::params::etcd_package_ensure,
+  $package_name                = $etcd::params::etcd_package_name,
+
+  $manage_user                 = $etcd::params::etcd_manage_user,
+  $user                        = $etcd::params::etcd_user,
+  $group                       = $etcd::params::etcd_group,
+
+  $manage_log_dir              = $etcd::params::etcd_manage_log_dir,
+  $data_dir                    = $etcd::params::etcd_data_dir,
+
+  $manage_data_dir             = $etcd::params::etcd_manage_data_dir,
+  $log_dir                     = $etcd::params::etcd_log_dir,
+
+  $node_name                   = $etcd::params::etcd_node_name,
+  $listen_peer_url             = $etcd::params::$etcd_listen_peer_url,
+  $listen_client_url           = $etcd::params::$etcd_listen_client_url,
+  $election_timeout            = $etcd::params::etcd_election_timeout,
+  $heartbeat_interval          = $etcd::params::etcd_heartbeat_interval,
+  $snapshot_count              = $etcd::params::etcd_snapshot_count,
+  $max_snapshots               = $etcd::params::etcd_max_snapshots,
+  $max_wals                    = $etcd::params::etcd_max_wals,
+  $cors                        = $etcd::params::etcd_cors,
+
+  $initial_advertise_peer_urls = $etcd::params::etcd_initial_advertise_peer_urls,
+  $initial_cluster             = $etcd::params::$etcd_initial_cluster,
+  $initial_cluster_token       = $etcd::params::etcd_initial_cluster_token,
+  $advertise_client_urls       = $etcd::params::etcd_advertise_client_urls,
+
+  $discovery                   = $etcd::params::etcd_discovery,
+  $discovery_endpoint          = $etcd::params::etcd_discovery_endpoint,
+  $discovery_srv_record        = $etcd::params::etcd_discovery_srv_record,
+  $discovery_fallback          = $etcd::params::etcd_discovery_fallback,
+  $discovery_proxy             = $etcd::params::etcd_discovery_proxy,
+
+  $proxy                       = $etcd::params::etcp_proxy,
+
+  $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
+  $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
+  $peer_key_file               = $etcd::params::etcd_peer_key_file) inherits etcd::params {
+
+  # Select cluster type
+  #
+  # We need a cluster token:
+  validate_sring($initial_cluster_token)
+
+  # if we are not a proxy
+  case $discovery {
+    # Use DNS SRV record
+    'dns': {
+      validate_string($discovery_srv_record)
+      if ($discovery_srv_record == '') {
+        fail('Invalid discovery srv record specified')
+      }
+      $use_dns_discovery = true,
+    }
+    # Static cluster
+    'initial-cluster': {
+      validate_array($initia_cluster)
+      $use_static_discover = true,
+    }
+    # Default, discovery url (public and custom)
+    'default': {
+      validate_string($discovery_endpoint)
+      if ($discovery_endpoint == '') {
+        fail('Invalid discovery endpoint specified')
+      }
+      $use_url_discovery = true,
+    }
   }
 
   # Validate other params
@@ -89,5 +105,4 @@ class etcd (
   class { '::etcd::config': } ~>
   class { '::etcd::service': } ->
   anchor { 'etcd::end': }
-
 }

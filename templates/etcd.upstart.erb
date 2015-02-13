@@ -9,8 +9,12 @@ stop on runlevel [!2345]
 
 respawn
 
+pre-start script
+  /etc/etcd/etcd.conf
+end script
+
 # Official way to run as a different user:
 # http://upstart.ubuntu.com/cookbook/#run-a-job-as-a-different-user
 
-exec su -s /bin/sh -c 'exec "$0" "$@"' <%= @user -%> -- <%= @binary_location %> -config /etc/etcd/etcd.conf >> <%= @log_dir %>/etcd.out
+exec su -s /bin/sh -c 'exec "$0" "$@"' <%= @user -%> -- <%= @binary_location %> $ETCD_OPTS >> <%= @log_dir %>/etcd.out
 

@@ -1,45 +1,122 @@
-addr               = "<%= @addr -%>"
-bind_addr          = "<%= @bind_addr -%>"
-ca_file            = "<%= @ca_file -%>"
-cert_file          = "<%= @cert_file -%>"
-<% if @cors and !@cors.empty? -%>
-cors               = ["<%=  @cors.join('", "') -%>"]
-<% end -%>
-cpu_profile_file   = "<%= @cpu_profile_file -%>"
-data_dir           = "<%= @data_dir -%>"
-key_file           = "<%= @key_file -%>"
-<% if @peers and !@peers.empty? -%>
-peers              = ["<%=  @peers.join('", "') -%>"]
-<% end -%>
-<% if @peers_file -%>
-peers_file         = "<%= @peers_file -%>"
-<% end -%>
-<% if @discovery -%>
-discovery          = "<%= @discovery_endpoint -%><%= @discovery_token -%>"
-<% end -%>
-<% if @discovery_srv -%>
-discovery-srv      = "<%= @discovery_srv_record -%>"
-<% end -%>
-max_result_buffer  = <%= @max_result_buffer %>
-max_retry_attempts = <%= @max_retry_attempts %>
-name               = "<%= @node_name -%>"
-snapshot           = <%= @snapshot %>
-snapshot-count     = <%= @snapshot_count %>
-verbose            = <%= @verbose %>
-very_verbose       = <%= @very_verbose %>
+#!/bin/bash
+# Managed by puppet!
+#
+# Member flags:
+ETCD_NAME="<%= @node_name -%>"
+ETCD_DATA_DIR="<%= @data_dir -%>"
+ETCD_SNAPSHOT_COUNT="<%= @snapshot_count -%>"
+ETCD_HEARTBEAT_INTERVAL="<%= @heartbeat_interval -%>"
+ETCD_ELECTION_TIMEOUT="<%= @election_timeout -%>"
+ETCD_LISTEN_PEER_URLS="<%= @member_listen_peer_url.join('","') -%>"
+ETCD_LISTEN_CLIENT_URLS="<%= @member_listen_client_url.join('","') -%>"
+ETCD_MAX_SNAPSHOTS="<%= @max_snapshots -%>"
+ETCD_MAX_WALS="<%= @max_wals -%>"
+ETCD_CORS="<%= @cors.join('","') -%>"
 
-[peer]
-addr               = "<%= @peer_addr -%>"
-bind_addr          = "<%= @peer_bind_addr -%>"
-ca_file            = "<%= @peer_ca_file -%>"
-cert_file          = "<%= @peer_cert_File -%>"
-key_file           = "<%= @peer_key_file -%>"
-election_timeout   = <%=  @peer_election_timeout %>
-heartbeat_interval = <%=  @peer_heartbeat_interval %>
+ETCD_# Cluster flags:
+ETCD_INITIAL_ADVERTISE_PEER_URLS="<%= @cluster_peer_url.join('","') -%>"
+ETCD_INITIAL_CLUSTER="<%= @initial_cluster.join('","') -%>"
+ETCD_INITIAL_CLUSTER_STATE="<%= @cluster_state -%>"
+ETCD_INITIAL_CLUSTER_TOKEN="<%= @cluster_token -%>"
+ETCD_ADVERTISE_CLIENT_URLS="<%= @cluster_client_url.join('","') -%>"
 
-[cluster]
-<% if @cluster_active_size -%>
-active_size        = <%= @cluster_active_size %>
+# Discovery flags
+<% if @discovery_srv == 'url' -%>
+ETCD_DISCOVERY="<%= @discovery_url -%>"
 <% end -%>
-remove_delay       = <%= @cluster_remove_delay %>
-sync_interval      = <%= @cluster_sync_interval %>
+<% if @discovery == 'dns' -%>
+ETCD_DISCOVERY_SRV="<%= @discover_srv_record -%>"
+<% end -%>
+ETCD_DISCOVERY_FALLBACK="<%= @discovery_fallback -%>"
+ETCD_DISCOVERY_PROXY="<%= @discovery_proxy -%>"
+
+# Proxy flags:
+ETCD_PROXY="<%= @proxy -%>"
+
+# Security flags:
+ETCD_PEER_CA_FILE="<%= @peer_ca_file -%>"
+ETCD_PEER_CERT_FILE="<%= @peer_cert_file -%>"
+ETCD_PEER_KEY_FILE="<%= @peer_key_file -%>"
+
+#Unsafe flags:
+#Please be CAUTIOUS to use unsafe flags because it will break the guarantee given
+#by consensus protocol.
+#ETCD_FORCE_NEW_CLUSTER="<%= @force_new_cluster -%>"
+
+# Below we build the opts to pass to the init script.
+ETCD_OPTS="-name=${ETCD_NODE_NAME} \
+          -initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+          -listen-client-urls=${ETCD_LISTEN_CLIENT_URLS} \
+          -listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
+          -data-dir=${ETCD_DATA_DIR} "
+
+if [ x$ETCD_INITIAL_CLUSTER_TOKEN != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -initial-cluster-token ${ETCD_INITIAL_CLUSTER_TOKEN}"
+fi
+
+<% if @use_dns_discovery -%>
+# Use srv record for service discovery
+if [ x$ETCD_DISCOVERY_SRV != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -discovery-srv ${ETCD_DISCOVER_SRV}"
+  ETCD_OPTS="$ETCD_OPTS -initial-cluster-state new"
+fi
+<% end -%>
+<% if @use_url_discovery -%>
+# Use url for service discovery, fexs: https://discovery.etcd.io/abcd1234
+if [ x$ETCD_DISCOVERY_ENDPOIN != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -discovery ${ETCD_DISCOVER_ENDPOINT}"
+fi
+<% end -%>
+<% if @use_static_discovery -%>
+if [ x$ETCD_INITIAL_CLUSTER != "x" ]; then
+  # etcd_initial_cluster elements should look like "hostame1,http://<ip1>:port,hostanem2,http://<ip2>:port"
+  ETCD_OPTS="$ETCD_OPTS -initial-cluster ${ETCD_INITIAL_CLUSTER}"
+  ETCD_OPTS="$ETCD_OPTS -initial-cluster-state new"
+fi
+<% end -%>
+
+# Heartbeat settings
+if [ x$ETCD_HEARTBEAT_INTERVAL != "x"]; then
+  ETCD_OPTS="$ETCD_OPTS -heartbeat-interval ${ETCD_HEARTBEAT_INTERVAL}"
+fi
+
+# Election settings
+if [ x$ETCD_ELECTION_TIMEOUT != "x"]; then
+  ETCD_OPTS="$ETCD_OPTS -election-timeput ${ETCD_ELECTION_TIMEOUT}"
+fi
+
+# Snapshot settings
+if [ x$ETCD_SNAPSHOT != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -snapshot --snapshot-count ${ETCD_SNAPSHOT_COUNT}"
+fi
+
+if [ x$ETCD_MAX_SNAPSHOTS != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -max-snapshots ${ETCD_MAX_SNAPSHOTS}"
+fi
+
+# WALS settings
+if [ x$ETCD_MAX_WALS != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -max-wals ${ETCD_MAX_WALS}"
+fi
+
+# Cors settings
+if [ x$ETCD_CORS != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -cors ${ETCD_CORS}"
+fi
+
+# Discovery fallback
+if [ x$ETCD_DISCOVERY_FALLBACK != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -discovery-fallback ${ETCD_DISCOVERY_FALLBACK}"
+fi
+
+# Discovery Proxy
+if [ x$ETCD_DISCOVERY_PROXY != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -discovery-proxy ${ETCD_DISCOVERY_PROXY}"
+fi
+
+# Security settings
+if [ x$ETCD_PEER_CA_FILE != "x" ] && [ x$ETCD_PEER_CERT_FILE != "x" ] && [ x$ETCD_PEER_KEY_FILE != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -ca-file ${ETCD_PEER_CA_FILE} -cert-file ${ETCD_PEER_CERT_FILE} -key-file ${ETCD_PEER_KEY_FILE}"
+fi
+
+export ETCD_OPTS

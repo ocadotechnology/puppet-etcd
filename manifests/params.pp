@@ -30,48 +30,37 @@ class etcd::params {
   $etcd_manage_log_dir          = true
   $etcd_log_dir                 = '/var/log/etcd'
 
-  # Node settings
+  # Member settings
   $etcd_node_name               = $::fqdn
-  $etcd_addr                    = "${::fqdn}:2379"
-  $etcd_bind_addr               = $etcd_addr
-  $etcd_ca_file                 = ''
-  $etcd_cert_file               = ''
-  $etcd_key_file                = ''
-  $etcd_cors                    = []
-  $etcd_cpu_profile_file        = ''
-
-  # Discovery support
-  $etcd_discovery               = false
-  $etcd_discovery_endpoint      = 'https://discovery.etcd.io/'
-  $etcd_discovery_token         = ''
-  $etcd_discovery_srv           = false
-  $etcd_discovery_srv_record    = ''
-
-  # Peer settings
-  $etcd_peer_addr               = "${::fqdn}:2380"
-  $etcd_peer_bind_addr          = $etcd_peer_addr
-  $etcd_peers                   = []
-  $etcd_peers_file              = undef
-  $etcd_peer_ca_file            = ''
-  $etcd_peer_cert_File          = ''
-  $etcd_peer_key_file           = ''
-  $etcd_peer_election_timeout   = '200'
-  $etcd_peer_heartbeat_interval = '50'
-
-  # Logging settings
-  $etcd_verbose                 = false
-  $etcd_very_verbose            = false
-
-  # Snapshot settings
-  $etcd_snapshot                = true
+  $etcd_listen_peer_url         = ["http://${::fqdn}:2380", "http://${::fqdn}:7001"]
+  $etcd_client_peer_url         = ["http://${::fqdn}:2379", "http://${::fqdn}:4001"]
+  $etcd_election_timeout        = '100'
+  $etcd_heartbeat_interval      = '1000'
   $etcd_snapshot_count          = '10000'
-
-  # Tuning settings
-  $etcd_max_result_buffer       = '1024'
-  $etcd_max_retry_attempts      = '3'
+  $etcd_max_snapshot            = '5'
+  $etcd_max_wals                = '5'
+  $etcd_cors                    = []
 
   # Cluster settings
-  $etcd_cluster_active_size     = false
-  $etcd_cluster_remove_delay    = '1800.0'
-  $etcd_cluster_sync_interval   = '5.0'
+  $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380", "http://${::fqdn}:7001"]
+  $etcd_initial_cluster             = ["http://${::fqdn}:2380", "http://${::fqdn}:7001"]
+  $etcd_initial_cluster_token       = 'etcd-cluster'
+  $etcd_advertise_client_urls       = ["http://${::fqdn}:2379", "http://${::fqdn}:4001"]
+
+  # Discovery support
+  $etcd_discovery               = 'url'
+  # discovery_endpoing, full url with token, f.exs: 'https://discovery.etcd.io/abcd1234'
+  $etcd_discovery_endpoint      = ''
+  $etcd_discovery_srv           = false
+  $etcd_discovery_srv_record    = ''
+  $etcd_discovery_fallback      = 'proxy'
+  $etcd_discovery_proxy         = 'none'
+
+  #Proxy
+  $etcd_proxy                   = 'off'
+
+  # Security settings
+  $etcd_peer_ca_file            = ''
+  $etcd_peer_cert_file          = ''
+  $etcd_peer_key_file           = ''
 }
