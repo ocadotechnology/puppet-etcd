@@ -35,8 +35,8 @@ class etcd (
   $log_dir                     = $etcd::params::etcd_log_dir,
 
   $node_name                   = $etcd::params::etcd_node_name,
-  $listen_peer_url             = $etcd::params::$etcd_listen_peer_url,
-  $listen_client_url           = $etcd::params::$etcd_listen_client_url,
+  $listen_peer_url             = $etcd::params::etcd_listen_peer_url,
+  $listen_client_url           = $etcd::params::etcd_listen_client_url,
   $election_timeout            = $etcd::params::etcd_election_timeout,
   $heartbeat_interval          = $etcd::params::etcd_heartbeat_interval,
   $snapshot_count              = $etcd::params::etcd_snapshot_count,
@@ -78,7 +78,7 @@ class etcd (
     }
     # Static cluster
     'initial-cluster': {
-      validate_array($initia_cluster)
+      validate_array($initial_cluster)
       $use_static_discover = true,
     }
     # Default, discovery url (public and custom)
