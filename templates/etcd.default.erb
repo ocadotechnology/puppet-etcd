@@ -76,12 +76,12 @@ fi
 <% end -%>
 
 # Heartbeat settings
-if [ x$ETCD_HEARTBEAT_INTERVAL != "x"]; then
+if [ x$ETCD_HEARTBEAT_INTERVAL != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -heartbeat-interval ${ETCD_HEARTBEAT_INTERVAL}"
 fi
 
 # Election settings
-if [ x$ETCD_ELECTION_TIMEOUT != "x"]; then
+if [ x$ETCD_ELECTION_TIMEOUT != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -election-timeput ${ETCD_ELECTION_TIMEOUT}"
 fi
 
