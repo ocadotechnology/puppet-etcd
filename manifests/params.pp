@@ -37,7 +37,7 @@ class etcd::params {
   $etcd_election_timeout        = '100'
   $etcd_heartbeat_interval      = '1000'
   $etcd_snapshot_count          = '10000'
-  $etcd_max_snapshot            = '5'
+  $etcd_max_snapshots           = '5'
   $etcd_max_wals                = '5'
   $etcd_cors                    = []
 
