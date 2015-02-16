@@ -44,12 +44,12 @@ ETCD_PEER_KEY_FILE="<%= @peer_key_file -%>"
 #ETCD_FORCE_NEW_CLUSTER="<%= @force_new_cluster -%>"
 
 # Below we build the opts to pass to the init script.
-ETCD_OPTS="-name=${ETCD_NAME} \
-          -advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
-          -initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
-          -listen-client-urls=${ETCD_LISTEN_CLIENT_URLS} \
-          -listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
-          -data-dir=${ETCD_DATA_DIR} "
+ETCD_OPTS="-name ${ETCD_NAME} \
+          -advertise-client-urls ${ETCD_ADVERTISE_CLIENT_URLS} \
+          -initial-advertise-peer-urls ${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+          -listen-client-urls ${ETCD_LISTEN_CLIENT_URLS} \
+          -listen-peer-urls ${ETCD_LISTEN_PEER_URLS} \
+          -data-dir ${ETCD_DATA_DIR} "
 
 if [ x$ETCD_INITIAL_CLUSTER_TOKEN != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -initial-cluster-token ${ETCD_INITIAL_CLUSTER_TOKEN}"
