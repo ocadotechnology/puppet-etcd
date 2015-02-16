@@ -82,7 +82,7 @@ fi
 
 # Election settings
 if [ x$ETCD_ELECTION_TIMEOUT != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -election-timeput ${ETCD_ELECTION_TIMEOUT}"
+  ETCD_OPTS="$ETCD_OPTS -election-timeout ${ETCD_ELECTION_TIMEOUT}"
 fi
 
 # Snapshot settings
