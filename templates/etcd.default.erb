@@ -25,7 +25,7 @@ ETCD_ADVERTISE_CLIENT_URLS="<%= @advertise_client_urls.join('","') -%>"
 ETCD_DISCOVERY="<%= @discovery_url -%>"
 <% end -%>
 <% if @discovery == 'dns' -%>
-ETCD_DISCOVERY_SRV="<%= @discover_srv_record -%>"
+ETCD_DISCOVERY_SRV="<%= @discovery_srv_record -%>"
 <% end -%>
 ETCD_DISCOVERY_FALLBACK="<%= @discovery_fallback -%>"
 ETCD_DISCOVERY_PROXY="<%= @discovery_proxy -%>"
