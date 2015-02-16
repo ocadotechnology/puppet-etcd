@@ -7,18 +7,18 @@ ETCD_DATA_DIR="<%= @data_dir -%>"
 ETCD_SNAPSHOT_COUNT="<%= @snapshot_count -%>"
 ETCD_HEARTBEAT_INTERVAL="<%= @heartbeat_interval -%>"
 ETCD_ELECTION_TIMEOUT="<%= @election_timeout -%>"
-ETCD_LISTEN_PEER_URLS="<%= @listen_peer_url.join('","') -%>"
-ETCD_LISTEN_CLIENT_URLS="<%= @listen_client_url.join('","') -%>"
+ETCD_LISTEN_PEER_URLS="<%= @listen_peer_url.join(',') -%>"
+ETCD_LISTEN_CLIENT_URLS="<%= @listen_client_url.join(',') -%>"
 ETCD_MAX_SNAPSHOTS="<%= @max_snapshots -%>"
 ETCD_MAX_WALS="<%= @max_wals -%>"
-ETCD_CORS="<%= @cors.join('","') -%>"
+ETCD_CORS="<%= @cors.join(',') -%>"
 
 # Cluster flags:
-ETCD_INITIAL_ADVERTISE_PEER_URLS="<%= @initial_advertise_peer_urls.join('","') -%>"
-ETCD_INITIAL_CLUSTER="<%= @initial_cluster.join('","') -%>"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="<%= @initial_advertise_peer_urls.join(',') -%>"
+ETCD_INITIAL_CLUSTER="<%= @initial_cluster.join(',') -%>"
 ETCD_INITIAL_CLUSTER_STATE="<%= @initial_cluster -%>"
 ETCD_INITIAL_CLUSTER_TOKEN="<%= @initial_cluster_token -%>"
-ETCD_ADVERTISE_CLIENT_URLS="<%= @advertise_client_urls.join('","') -%>"
+ETCD_ADVERTISE_CLIENT_URLS="<%= @advertise_client_urls.join(',') -%>"
 
 # Discovery flags
 <% if @discovery_srv == 'url' -%>
