@@ -57,14 +57,14 @@ fi
 <% if @use_dns_discovery -%>
 # Use srv record for service discovery
 if [ x$ETCD_DISCOVERY_SRV != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -discovery-srv ${ETCD_DISCOVER_SRV}"
+  ETCD_OPTS="$ETCD_OPTS -discovery-srv ${ETCD_DISCOVERY_SRV}"
   ETCD_OPTS="$ETCD_OPTS -initial-cluster-state new"
 fi
 <% end -%>
 <% if @use_url_discovery -%>
 # Use url for service discovery, fexs: https://discovery.etcd.io/abcd1234
 if [ x$ETCD_DISCOVERY_ENDPOIN != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -discovery ${ETCD_DISCOVER_ENDPOINT}"
+  ETCD_OPTS="$ETCD_OPTS -discovery ${ETCD_DISCOVERY_ENDPOINT}"
 fi
 <% end -%>
 <% if @use_static_discovery -%>
