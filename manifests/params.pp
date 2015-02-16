@@ -32,8 +32,8 @@ class etcd::params {
 
   # Member settings
   $etcd_node_name               = $::fqdn
-  $etcd_listen_peer_url         = ["http://${::fqdn}:2380"] #, "http://${::fqdn}:7001"]
-  $etcd_listen_client_url       = ["http://${::fqdn}:2379"] #, "http://${::fqdn}:4001"]
+  $etcd_listen_peer_url         = ["http://${::fqdn}:2380", "http://${::fqdn}:7001"]
+  $etcd_listen_client_url       = ["http://${::fqdn}:2379", "http://${::fqdn}:4001"]
   $etcd_election_timeout        = '100'
   $etcd_heartbeat_interval      = '1000'
   $etcd_snapshot_count          = '10000'
@@ -42,10 +42,10 @@ class etcd::params {
   $etcd_cors                    = []
 
   # Cluster settings
-  $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380"] #, "http://${::fqdn}:7001"]
-  $etcd_initial_cluster             = ["http://${::fqdn}:2380"] #, "http://${::fqdn}:7001"]
+  $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380", "http://${::fqdn}:7001"]
+  $etcd_initial_cluster             = ["http://${::fqdn}:2380", "http://${::fqdn}:7001"]
   $etcd_initial_cluster_token       = 'etcd-cluster'
-  $etcd_advertise_client_urls       = ["http://${::fqdn}:2379"] #, "http://${::fqdn}:4001"]
+  $etcd_advertise_client_urls       = ["http://${::fqdn}:2379", "http://${::fqdn}:4001"]
 
   # Discovery support
   $etcd_discovery               = 'url'
