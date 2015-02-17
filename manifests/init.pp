@@ -82,13 +82,24 @@ class etcd (
       $use_static_discover = true
     }
     # Default, discovery url (public and custom)
-    'default': {
+    default: {
       validate_string($discovery_endpoint)
       if ($discovery_endpoint == '') {
         fail('Invalid discovery endpoint specified')
       }
       $use_url_discovery = true
     }
+  }
+
+  case $proxy {
+    'on': {
+      $proxy_node == true
+      validate_string($discovery_srv_record)
+      if ($discovery_srv_record == '') {
+        fail('Invalid discovery srv record, please set it in manifest')
+      }
+    }
+    defalut: {}
   }
 
   # Validate other params
