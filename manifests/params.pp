@@ -32,8 +32,8 @@ class etcd::params {
 
   # Member settings
   $etcd_node_name               = $::fqdn
-  $etcd_listen_peer_url         = ["http://${::fqdn}:2380", "http://127.0.0.1:7001"]#, "http://${::fqdn}:7001", "http://127.0.0.1:2380", "http://127.0.0.1:7001"]
-  $etcd_listen_client_url       = ["http://${::fqdn}:2379", "http://127.0.0.1:4001"]#, "http://${::fqdn}:4001", "http://127.0.0.1:2379", "http://127.0.0.1:4001"]
+  $etcd_listen_peer_url         = ["http://${::fqdn}:2380"]#, "http://127.0.0.1:7001", "http://${::fqdn}:7001", "http://127.0.0.1:2380", "http://127.0.0.1:7001"]
+  $etcd_listen_client_url       = ["http://0.0.0.0:2379", "http://127.0.0.1:4001"]#, "http://${::fqdn}:4001", "http://127.0.0.1:2379", "http://127.0.0.1:4001"]
   $etcd_election_timeout        = '100'
   $etcd_heartbeat_interval      = '1000'
   $etcd_snapshot_count          = '10000'
