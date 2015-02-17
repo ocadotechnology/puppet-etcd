@@ -49,7 +49,7 @@ ETCD_OPTS="-name ${ETCD_NAME} \
            -discovery-srv ${ETCD_DISCOVERY_SRV} \
            -initial-advertise-peer-urls ${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
            -initial-cluster-token ${ETCD_INITIAL_CLUSTER_TOKEN}
-           -initial-cluster-state new \
+           -initial-cluster-state existing \
            -advertise-client-urls ${ETCD_ADVERTISE_CLIENT_URLS} \
            -listen-client-urls ${ETCD_LISTEN_CLIENT_URLS} \
            -listen-peer-urls ${ETCD_LISTEN_PEER_URLS} \
