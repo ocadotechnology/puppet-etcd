@@ -93,7 +93,7 @@ class etcd (
 
   case $proxy {
     'on': {
-      $proxy_node == true
+      $proxy_node = true
       validate_string($discovery_srv_record)
       if ($discovery_srv_record == '') {
         fail('Invalid discovery srv record, please set it in manifest')
