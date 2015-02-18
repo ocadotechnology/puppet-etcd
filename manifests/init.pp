@@ -67,7 +67,6 @@ class etcd (
   #
   # We need a cluster token:
   validate_string($initial_cluster_token)
-  validate_bool($cluster_node)
 
   case $mode {
 
