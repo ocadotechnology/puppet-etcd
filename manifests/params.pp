@@ -30,10 +30,13 @@ class etcd::params {
   $etcd_manage_log_dir          = true
   $etcd_log_dir                 = '/var/log/etcd'
 
+  # Etcd mode cluster or proxy
+  $etcd_mode                    = 'proxy'
+
   # Member settings
   $etcd_node_name               = $::fqdn
-  $etcd_listen_peer_url         = ["http://${::fqdn}:2380"]#, "http://127.0.0.1:7001", "http://${::fqdn}:7001", "http://127.0.0.1:2380", "http://127.0.0.1:7001"]
-  $etcd_listen_client_url       = ["http://0.0.0.0:2379", "http://127.0.0.1:4001"]#, "http://${::fqdn}:4001", "http://127.0.0.1:2379", "http://127.0.0.1:4001"]
+  $etcd_listen_peer_url         = ["http://${::fqdn}:2380"]
+  $etcd_listen_client_url       = ["http://0.0.0.0:2379", "http://127.0.0.1:4001"]
   $etcd_election_timeout        = '100'
   $etcd_heartbeat_interval      = '1000'
   $etcd_snapshot_count          = '10000'
@@ -42,22 +45,22 @@ class etcd::params {
   $etcd_cors                    = []
 
   # Cluster settings
-  $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380"]#, "http://${::fqdn}:7001"]
-  $etcd_initial_cluster             = ["http://${::fqdn}:2380"]#, "http://${::fqdn}:7001"]
+  $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380"]
+  $etcd_initial_cluster             = ["http://${::fqdn}:2380"]
+  $etcd_initial_cluster_state       = 'exsisting'
   $etcd_initial_cluster_token       = 'etcd-cluster'
-  $etcd_advertise_client_urls       = ["http://${::fqdn}:2379"]#, "http://${::fqdn}:4001"]
+  $etcd_advertise_client_urls       = ["http://${::fqdn}:2379"]
 
   # Discovery support
-  $etcd_discovery               = 'url'
-  # discovery_endpoing, full url with token, f.exs: 'https://discovery.etcd.io/abcd1234'
+  $etcd_discovery               = 'none'
+  # discovery_endpoint, full url with token, f.exs: 'https://discovery.etcd.io/abcd1234'
   $etcd_discovery_endpoint      = ''
-  $etcd_discovery_srv           = false
-  $etcd_discovery_srv_record    = ''
+  $etcd_discovery_srv_record    = ${::domain}
   $etcd_discovery_fallback      = 'proxy'
   $etcd_discovery_proxy         = 'none'
 
   #Proxy
-  $etcd_proxy                   = 'off'
+  $etcd_proxy                   = 'on'
 
   # Security settings
   $etcd_peer_ca_file            = ''

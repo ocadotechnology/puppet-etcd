@@ -46,6 +46,7 @@ class etcd (
 
   $initial_advertise_peer_urls = $etcd::params::etcd_initial_advertise_peer_urls,
   $initial_cluster             = $etcd::params::etcd_initial_cluster,
+  $initial_cluster_state       = $etcd::params::etcd_initial_cluster_state,
   $initial_cluster_token       = $etcd::params::etcd_initial_cluster_token,
   $advertise_client_urls       = $etcd::params::etcd_advertise_client_urls,
 
@@ -55,7 +56,8 @@ class etcd (
   $discovery_fallback          = $etcd::params::etcd_discovery_fallback,
   $discovery_proxy             = $etcd::params::etcd_discovery_proxy,
 
-  $proxy                       = $etcd::params::etcp_proxy,
+  $mode                        = $etcd::params::etcd_mode,
+  $proxy                       = $etcd::params::etcd_proxy,
 
   $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
   $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
@@ -65,42 +67,46 @@ class etcd (
   #
   # We need a cluster token:
   validate_string($initial_cluster_token)
+  validate_bool($cluster_node)
 
-  # if we are not a proxy
-  case $discovery {
-    # Use DNS SRV record
-    'dns': {
-      validate_string($discovery_srv_record)
-      if ($discovery_srv_record == '') {
-        fail('Invalid discovery srv record specified')
-      }
-      $use_dns_discovery = true
-    }
-    # Static cluster
-    'initial-cluster': {
-      validate_array($initial_cluster)
-      $use_static_discover = true
-    }
-    # Default, discovery url (public and custom)
-    'url': {
-      validate_string($discovery_endpoint)
-      if ($discovery_endpoint == '') {
-        fail('Invalid discovery endpoint specified')
-      }
-      $use_url_discovery = true
-    }
-    default: {}
-  }
+  case $mode {
 
-  case $proxy {
-    'on': {
-      $proxy_node = true
+    # Proxy mode (default)
+    'proxy': {
       validate_string($discovery_srv_record)
       if ($discovery_srv_record == '') {
         fail('Invalid discovery srv record, please set it in manifest')
       }
     }
-    defalut: {}
+
+    # Cluster mode
+    'cluster': {
+      case $discovery {
+        # Use DNS SRV record
+        'dns': {
+          validate_string($discovery_srv_record)
+          if ($discovery_srv_record == '') {
+            fail('Invalid discovery srv record specified')
+          }
+          $use_dns_discovery = true
+        }
+        # Static cluster
+        'initial-cluster': {
+          validate_array($initial_cluster)
+          $use_static_discover = true
+        }
+        # Default, discovery url (public and custom)
+        'url': {
+          validate_string($discovery_endpoint)
+          if ($discovery_endpoint == '') {
+            fail('Invalid discovery endpoint specified')
+          }
+          $use_url_discovery = true
+        }
+        default: {}
+      }
+    }
+    default: { fail('No mode set') }
   }
 
   # Validate other params
