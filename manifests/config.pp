@@ -8,7 +8,7 @@ class etcd::config {
         owner   => $etcd::user,
         group   => $etcd::group,
         mode    => '0644',
-        content => template('etcd/etcd.sysconfig.erb'),
+        content => template('etcd/etcd.config.erb'),
       }
     }
     'Debian' : {
@@ -17,7 +17,7 @@ class etcd::config {
         owner   => $etcd::user,
         group   => $etcd::group,
         mode    => '0644',
-        content => template('etcd/etcd.default.erb'),
+        content => template('etcd/etcd.config.erb'),
       }
     }
     default  : {
