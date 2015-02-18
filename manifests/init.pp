@@ -82,13 +82,14 @@ class etcd (
       $use_static_discover = true
     }
     # Default, discovery url (public and custom)
-    default: {
+    'url': {
       validate_string($discovery_endpoint)
       if ($discovery_endpoint == '') {
         fail('Invalid discovery endpoint specified')
       }
       $use_url_discovery = true
     }
+    default: {}
   }
 
   case $proxy {
