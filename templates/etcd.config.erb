@@ -57,7 +57,9 @@ ETCD_OPTS="-name ${ETCD_NAME} \
 
 <% end -%>
 <% if @mode == 'proxy' -%>
-ETCD_OPTS="-proxy on -discovery-srv ${ETCD_DISCOVERY_SRV}"
+  ETCD_OPTS="-proxy on \
+             -discovery-srv ${ETCD_DISCOVERY_SRV} \
+             -data-dir ${ETCD_DATA_DIR}"
 <% end -%>
 
 export ETCD_OPTS
