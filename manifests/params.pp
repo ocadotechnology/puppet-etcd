@@ -53,8 +53,9 @@ class etcd::params {
 
   # Discovery support
   $etcd_discovery               = 'none'
-  # discovery_endpoint, full url with token, f.exs: 'https://discovery.etcd.io/abcd1234'
+  # discovery_endpoint, full url with token, f.exs: 'https://discovery.etcd.io/abcd1234':
   $etcd_discovery_endpoint      = ''
+  # where to search for cluster members:
   $etcd_discovery_srv_record    = $::domain
   $etcd_discovery_fallback      = 'proxy'
   $etcd_discovery_proxy         = 'none'
