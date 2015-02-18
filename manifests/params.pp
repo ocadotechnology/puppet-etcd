@@ -47,7 +47,7 @@ class etcd::params {
   # Cluster settings
   $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380"]
   $etcd_initial_cluster             = ["http://${::fqdn}:2380"]
-  $etcd_initial_cluster_state       = 'exsisting'
+  $etcd_initial_cluster_state       = 'existing'
   $etcd_initial_cluster_token       = 'etcd-cluster'
   $etcd_advertise_client_urls       = ["http://${::fqdn}:2379"]
 
