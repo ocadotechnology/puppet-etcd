@@ -25,8 +25,12 @@ ETCD_INITIAL_CLUSTER_TOKEN="<%= @initial_cluster_token -%>"
 ETCD_ADVERTISE_CLIENT_URLS="<%= @advertise_client_urls.join(',') -%>"
 
 # Discovery flags
-ETCD_DISCOVERY="<%= @discovery_url -%>"
-ETCD_DISCOVERY_SRV="<%= @discovery_srv_record -%>"
+<% if @discovery == 'url' -%>
+ETCD_DISCOVERY="-discovery <%= @discovery_url -%>"
+<% end -%>
+<% if @discovery == 'dns' -%>
+ETCD_DISCOVERY="-discovery-srv <%= @discovery_srv_record -%>"
+<% end -%>
 ETCD_DISCOVERY_FALLBACK="<%= @discovery_fallback -%>"
 ETCD_DISCOVERY_PROXY="<%= @discovery_proxy -%>"
 
@@ -46,7 +50,7 @@ ETCD_PEER_KEY_FILE="<%= @peer_key_file -%>"
 <% if @mode == 'cluster' -%>
 # Below we build the opts to pass to the init script.
 ETCD_OPTS="-name ${ETCD_NAME} \
-           -discovery-srv ${ETCD_DISCOVERY_SRV} \
+           ${ETCD_DISCOVERY} \
            -initial-advertise-peer-urls ${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
            -initial-cluster-token ${ETCD_INITIAL_CLUSTER_TOKEN} \
            -initial-cluster-state ${ETCD_INITIAL_CLUSTER_STATE} \
