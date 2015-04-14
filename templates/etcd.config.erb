@@ -48,7 +48,7 @@ ETCD_PEER_KEY_FILE="<%= @peer_key_file -%>"
 ETCD_OPTS="-name ${ETCD_NAME} \
            -discovery-srv ${ETCD_DISCOVERY_SRV} \
            -initial-advertise-peer-urls ${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
-           -initial-cluster-token ${ETCD_INITIAL_CLUSTER_TOKEN}
+           -initial-cluster-token ${ETCD_INITIAL_CLUSTER_TOKEN} \
            -initial-cluster-state ${ETCD_INITIAL_CLUSTER_STATE} \
            -advertise-client-urls ${ETCD_ADVERTISE_CLIENT_URLS} \
            -listen-client-urls ${ETCD_LISTEN_CLIENT_URLS} \
