@@ -1,6 +1,6 @@
 # etcd - distributed configuration daemon
 #
-# Maintained by Puppet. Do not edit by hand. 
+# Maintained by Puppet. Do not edit by hand.
 #
 description	"distributed configuration daemon"
 
@@ -9,11 +9,10 @@ stop on runlevel [!2345]
 
 respawn
 
-# Official way to run as a different user:
-# http://upstart.ubuntu.com/cookbook/#run-a-job-as-a-different-user
+setuid <%= @user %>
+setgid <%= @group %>
 
 script
   . /etc/default/etcd
-  exec su -s /bin/sh -c 'exec "$0" "$@"' <%= @user -%> -- <%= @binary_location %> $ETCD_OPTS >> <%= @log_dir %>/etcd.out
+  exec <%= @binary_location %> >> <%= @log_dir %>/etcd.out
 end script
-

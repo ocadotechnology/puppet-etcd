@@ -57,7 +57,6 @@ class etcd (
   $discovery_proxy             = $etcd::params::etcd_discovery_proxy,
 
   $mode                        = $etcd::params::etcd_mode,
-  $proxy                       = $etcd::params::etcd_proxy,
 
   $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
   $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
@@ -68,44 +67,37 @@ class etcd (
   # We need a cluster token:
   validate_string($initial_cluster_token)
 
-  case $mode {
+  validate_re($mode, '^(cluster|mode)$')
 
-    # Proxy mode (default)
-    'proxy': {
+  case $discovery {
+    # Use DNS SRV record
+    'dns': {
       validate_string($discovery_srv_record)
       if ($discovery_srv_record == '') {
-        fail('Invalid discovery srv record, please set it in manifest')
+        fail('Invalid discovery srv record specified')
       }
+      $use_dns_discovery = true
     }
+    # Static cluster
+    'initial-cluster': {
+      validate_array($initial_cluster)
+      $use_static_discover = true
+    }
+    # Default, discovery url (public and custom)
+    'url': {
+      validate_string($discovery_endpoint)
+      if ($discovery_endpoint == '') {
+        fail('Invalid discovery endpoint specified')
+      }
+      $use_url_discovery = true
+    }
+    default: {}
+  }
 
-    # Cluster mode
-    'cluster': {
-      case $discovery {
-        # Use DNS SRV record
-        'dns': {
-          validate_string($discovery_srv_record)
-          if ($discovery_srv_record == '') {
-            fail('Invalid discovery srv record specified')
-          }
-          $use_dns_discovery = true
-        }
-        # Static cluster
-        'initial-cluster': {
-          validate_array($initial_cluster)
-          $use_static_discover = true
-        }
-        # Default, discovery url (public and custom)
-        'url': {
-          validate_string($discovery_endpoint)
-          if ($discovery_endpoint == '') {
-            fail('Invalid discovery endpoint specified')
-          }
-          $use_url_discovery = true
-        }
-        default: {}
-      }
-    }
-    default: { fail('No mode set') }
+  $proxy = $mode ? {
+    'proxy'   => 'on',
+    'cluster' => 'off',
+    default   => 'NA',
   }
 
   # Validate other params

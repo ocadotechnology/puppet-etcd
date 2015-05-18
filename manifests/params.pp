@@ -46,7 +46,7 @@ class etcd::params {
 
   # Cluster settings
   $etcd_initial_advertise_peer_urls = ["http://${::fqdn}:2380"]
-  $etcd_initial_cluster             = ["http://${::fqdn}:2380"]
+  $etcd_initial_cluster             = ["${::fqdn}=http://${::fqdn}:2380"]
   $etcd_initial_cluster_state       = 'existing'
   $etcd_initial_cluster_token       = 'etcd-cluster'
   $etcd_advertise_client_urls       = ["http://${::fqdn}:2379"]
@@ -59,9 +59,6 @@ class etcd::params {
   $etcd_discovery_srv_record    = $::domain
   $etcd_discovery_fallback      = 'proxy'
   $etcd_discovery_proxy         = 'none'
-
-  #Proxy
-  $etcd_proxy                   = 'on'
 
   # Security settings
   $etcd_peer_ca_file            = ''

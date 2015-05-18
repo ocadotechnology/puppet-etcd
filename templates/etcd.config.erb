@@ -1,6 +1,8 @@
 #!/bin/bash
 # Managed by puppet!
 #
+set -a
+
 ETCD_MODE="<%= @mode -%>"
 ETCD_LOG_DIR="<%= @log_dir -%>"
 ETCD_LOG_FILE="etcd.log"
@@ -26,10 +28,10 @@ ETCD_ADVERTISE_CLIENT_URLS="<%= @advertise_client_urls.join(',') -%>"
 
 # Discovery flags
 <% if @discovery == 'url' -%>
-ETCD_DISCOVERY="-discovery <%= @discovery_url -%>"
+ETCD_DISCOVERY="<%= @discovery_url -%>"
 <% end -%>
 <% if @discovery == 'dns' -%>
-ETCD_DISCOVERY="-discovery-srv <%= @discovery_srv_record -%>"
+ETCD_DISCOVERY_SRV="<%= @discovery_srv_record -%>"
 <% end -%>
 ETCD_DISCOVERY_FALLBACK="<%= @discovery_fallback -%>"
 ETCD_DISCOVERY_PROXY="<%= @discovery_proxy -%>"
