@@ -9,29 +9,29 @@ class etcd::install {
       ensure  => 'present',
       gid     => $etcd::group,
       require => Group[$etcd::group],
-      before  => Package['etcd']
+      before  => Package['etcd'],
     }
   }
 
   # Create etcd data dir if required
   if $etcd::manage_data_dir {
     file { $etcd::data_dir:
-      ensure => 'directory',
-      owner  => $etcd::user,
-      group  => $etcd::group,
-      mode   => '0750',
-      before => Package['etcd']
+      ensure  => 'directory',
+      owner   => $etcd::user,
+      group   => $etcd::group,
+      mode    => '0750',
+      require => Package['etcd'],
     }
   }
 
   # Create etcd log dir if required
   if $etcd::manage_log_dir {
     file { $etcd::log_dir:
-      ensure => 'directory',
-      owner  => $etcd::user,
-      group  => $etcd::group,
-      mode   => '0750',
-      before => Package['etcd']
+      ensure  => 'directory',
+      owner   => $etcd::user,
+      group   => $etcd::group,
+      mode    => '0750',
+      require => Package['etcd'],
     }
   }
 
