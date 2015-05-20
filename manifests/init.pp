@@ -67,7 +67,7 @@ class etcd (
   # We need a cluster token:
   validate_string($initial_cluster_token)
 
-  validate_re($mode, '^(cluster|mode)$')
+  validate_re($mode, '^(cluster|proxy)$')
 
   case $discovery {
     # Use DNS SRV record
