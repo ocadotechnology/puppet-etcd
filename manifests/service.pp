@@ -13,7 +13,14 @@ class etcd::service {
       $service_file_location = '/etc/init/etcd.conf'
       $service_file_contents = template('etcd/etcd.upstart.erb')
       $service_file_mode     = '0444'
-      $service_provider      = 'upstart'
+
+      # Ubuntu xenial contains valid systemd service config #
+      if $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemmajrelease, '16') >= 0 {
+        $service_provider      = undef
+      } else {
+        $service_provider      = 'upstart'
+      }
+
     }
     default  : {
       fail("OSFamily ${::osfamily} not supported.")

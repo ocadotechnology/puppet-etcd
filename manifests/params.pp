@@ -11,7 +11,13 @@ class etcd::params {
   # Service settings
   $etcd_service_ensure          = 'running'
   $etcd_service_enable          = true
-  $etcd_manage_service_file     = true
+
+  # Ubuntu xenial contains valid systemd service config #
+  if $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemmajrelease, '16') >= 0 {
+    $etcd_manage_service_file     = true
+  } else {
+    $etcd_manage_service_file     = false
+  }
 
   # Package settings
   $etcd_package_ensure          = 'installed'
