@@ -1,6 +1,12 @@
 # == Class etcd::service
 #
 class etcd::service {
+
+  $binary_location  = $etcd::binary_location
+  $group            = $etcd::group
+  $log_dir          = $etcd::log_dir
+  $user             = $etcd::user
+
   # Switch service details based on osfamily
   case $::osfamily {
     'RedHat' : {
