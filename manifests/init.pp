@@ -60,7 +60,12 @@ class etcd (
 
   $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
   $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
-  $peer_key_file               = $etcd::params::etcd_peer_key_file) inherits etcd::params {
+  $peer_key_file               = $etcd::params::etcd_peer_key_file
+
+  Optional[String]   $gateway_endpoints   = undef,
+  String             $gateway_listen_addr = '127.0.0.1:2379',
+
+) inherits etcd::params {
 
   # Select cluster type
   #
@@ -105,9 +110,16 @@ class etcd (
   validate_bool($manage_data_dir)
   validate_bool($manage_service_file)
 
+  # etcd cluster and the gateway are mutually exclused for our purposes #
+  if $mode == 'gateway' {
+    $service_class = '::etcd::gateway'
+  } else {
+    $service_class = '::etcd::service'
+  }
+
   anchor { 'etcd::begin': } ->
   class { '::etcd::install': } ->
   class { '::etcd::config': } ~>
-  class { '::etcd::service': } ->
+  class { "${service_class}": } ->
   anchor { 'etcd::end': }
 }
