@@ -39,6 +39,10 @@ class etcd::params {
   # Etcd mode cluster or proxy
   $etcd_mode                    = 'proxy'
 
+  # Gateway
+  $gateway_endpoints            = undef
+  $gateway_listen_addr          = '127.0.0.1:2379'
+
   # Member settings
   $etcd_node_name               = $::fqdn
   $etcd_listen_peer_url         = ["http://${::fqdn}:2380"]

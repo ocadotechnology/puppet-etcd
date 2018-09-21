@@ -15,59 +15,58 @@
 # Gavin Williams <fatmcgav@gmail.com>
 #
 class etcd (
-  $binary_location             = $etcd::params::etcd_binary_location,
+  String                                          $binary_location             = $etcd::params::etcd_binary_location,
 
-  $service_ensure              = $etcd::params::etcd_service_ensure,
-  $service_enable              = $etcd::params::etcd_service_enable,
-  $manage_service_file         = $etcd::params::etcd_manage_service_file,
+  Enum['stopped', 'running']                      $service_ensure              = $etcd::params::etcd_service_ensure,
+  Boolean                                         $service_enable              = $etcd::params::etcd_service_enable,
+  Boolean                                         $manage_service_file         = $etcd::params::etcd_manage_service_file,
 
-  $package_ensure              = $etcd::params::etcd_package_ensure,
-  $package_name                = $etcd::params::etcd_package_name,
+  String                                          $package_ensure              = $etcd::params::etcd_package_ensure,
+  String                                          $package_name                = $etcd::params::etcd_package_name,
 
-  $manage_user                 = $etcd::params::etcd_manage_user,
-  $user                        = $etcd::params::etcd_user,
-  $group                       = $etcd::params::etcd_group,
+  Boolean                                         $manage_user                 = $etcd::params::etcd_manage_user,
+  String                                          $user                        = $etcd::params::etcd_user,
+  String                                          $group                       = $etcd::params::etcd_group,
 
-  $manage_log_dir              = $etcd::params::etcd_manage_log_dir,
-  $data_dir                    = $etcd::params::etcd_data_dir,
+  Boolean                                         $manage_log_dir              = $etcd::params::etcd_manage_log_dir,
+  String                                          $data_dir                    = $etcd::params::etcd_data_dir,
 
-  $manage_data_dir             = $etcd::params::etcd_manage_data_dir,
-  $log_dir                     = $etcd::params::etcd_log_dir,
+  Boolean                                         $manage_data_dir             = $etcd::params::etcd_manage_data_dir,
+  String                                          $log_dir                     = $etcd::params::etcd_log_dir,
 
-  $node_name                   = $etcd::params::etcd_node_name,
-  $listen_peer_url             = $etcd::params::etcd_listen_peer_url,
-  $listen_client_url           = $etcd::params::etcd_listen_client_url,
-  $election_timeout            = $etcd::params::etcd_election_timeout,
-  $heartbeat_interval          = $etcd::params::etcd_heartbeat_interval,
-  $snapshot_count              = $etcd::params::etcd_snapshot_count,
-  $max_snapshots               = $etcd::params::etcd_max_snapshots,
-  $max_wals                    = $etcd::params::etcd_max_wals,
-  $cors                        = $etcd::params::etcd_cors,
+  String                                          $node_name                   = $etcd::params::etcd_node_name,
+  Array                                           $listen_peer_url             = $etcd::params::etcd_listen_peer_url,
+  Array                                           $listen_client_url           = $etcd::params::etcd_listen_client_url,
+  String                                          $election_timeout            = $etcd::params::etcd_election_timeout,
+  String                                          $heartbeat_interval          = $etcd::params::etcd_heartbeat_interval,
+  String                                          $snapshot_count              = $etcd::params::etcd_snapshot_count,
+  String                                          $max_snapshots               = $etcd::params::etcd_max_snapshots,
+  String                                          $max_wals                    = $etcd::params::etcd_max_wals,
+  Array                                           $cors                        = $etcd::params::etcd_cors,
 
-  $initial_advertise_peer_urls = $etcd::params::etcd_initial_advertise_peer_urls,
-  $initial_cluster             = $etcd::params::etcd_initial_cluster,
-  $initial_cluster_state       = $etcd::params::etcd_initial_cluster_state,
-  $initial_cluster_token       = $etcd::params::etcd_initial_cluster_token,
-  $advertise_client_urls       = $etcd::params::etcd_advertise_client_urls,
+  Array                                           $initial_advertise_peer_urls = $etcd::params::etcd_initial_advertise_peer_urls,
+  Array                                           $initial_cluster             = $etcd::params::etcd_initial_cluster,
+  String                                          $initial_cluster_state       = $etcd::params::etcd_initial_cluster_state,
+  String                                          $initial_cluster_token       = $etcd::params::etcd_initial_cluster_token,
+  Array                                           $advertise_client_urls       = $etcd::params::etcd_advertise_client_urls,
 
-  $discovery                   = $etcd::params::etcd_discovery,
-  $discovery_endpoint          = $etcd::params::etcd_discovery_endpoint,
-  $discovery_srv_record        = $etcd::params::etcd_discovery_srv_record,
-  $discovery_fallback          = $etcd::params::etcd_discovery_fallback,
-  $discovery_proxy             = $etcd::params::etcd_discovery_proxy,
+  Enum['none', 'dns', 'initial-cluster', 'url']   $discovery                   = $etcd::params::etcd_discovery,
+  String                                          $discovery_endpoint          = $etcd::params::etcd_discovery_endpoint,
+  String                                          $discovery_srv_record        = $etcd::params::etcd_discovery_srv_record,
+  String                                          $discovery_fallback          = $etcd::params::etcd_discovery_fallback,
+  String                                          $discovery_proxy             = $etcd::params::etcd_discovery_proxy,
 
-  $mode                        = $etcd::params::etcd_mode,
+  Enum['cluster', 'proxy', 'gateway']             $mode                        = $etcd::params::etcd_mode,
 
-  $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
-  $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
-  $peer_key_file               = $etcd::params::etcd_peer_key_file) inherits etcd::params {
+  String                                          $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
+  String                                          $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
+  String                                          $peer_key_file               = $etcd::params::etcd_peer_key_file
 
-  # Select cluster type
-  #
-  # We need a cluster token:
-  validate_string($initial_cluster_token)
+  Optional[String]                                $gateway_endpoints           = $etcd::params::gateway_endpoints,
+  String                                          $gateway_listen_addr         = $etcd::params::gateway_listen_addr,
 
-  validate_re($mode, '^(cluster|proxy)$')
+) inherits etcd::params {
+
 
   case $discovery {
     # Use DNS SRV record
@@ -100,14 +99,16 @@ class etcd (
     default   => 'NA',
   }
 
-  # Validate other params
-  validate_bool($manage_user)
-  validate_bool($manage_data_dir)
-  validate_bool($manage_service_file)
+  # etcd cluster and the gateway are mutually exclused for our purposes #
+  if $mode == 'gateway' {
+    $service_class = '::etcd::gateway'
+  } else {
+    $service_class = '::etcd::service'
+  }
 
   anchor { 'etcd::begin': } ->
   class { '::etcd::install': } ->
   class { '::etcd::config': } ~>
-  class { '::etcd::service': } ->
+  class { "${service_class}": } ->
   anchor { 'etcd::end': }
 }
