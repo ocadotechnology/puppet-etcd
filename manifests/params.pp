@@ -47,11 +47,11 @@ class etcd::params {
   $etcd_node_name               = $::fqdn
   $etcd_listen_peer_url         = ["http://${::fqdn}:2380"]
   $etcd_listen_client_url       = ["http://0.0.0.0:2379", "http://127.0.0.1:4001"]
-  $etcd_election_timeout        = '1000'
-  $etcd_heartbeat_interval      = '100'
-  $etcd_snapshot_count          = '10000'
-  $etcd_max_snapshots           = '5'
-  $etcd_max_wals                = '5'
+  $etcd_election_timeout        = 1000
+  $etcd_heartbeat_interval      = 100
+  $etcd_snapshot_count          = 10000
+  $etcd_max_snapshots           = 5
+  $etcd_max_wals                = 5
   $etcd_cors                    = []
 
   # Cluster settings
