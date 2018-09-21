@@ -62,8 +62,8 @@ class etcd (
   $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
   $peer_key_file               = $etcd::params::etcd_peer_key_file
 
-  Optional[String]   $gateway_endpoints   = undef,
-  String             $gateway_listen_addr = '127.0.0.1:2379',
+  Optional[String]   $gateway_endpoints   = $etcd::params::gateway_endpoints,
+  String             $gateway_listen_addr = $etcd::params::gateway_listen_addr,
 
 ) inherits etcd::params {
 
