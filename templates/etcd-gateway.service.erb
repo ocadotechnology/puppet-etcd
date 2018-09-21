@@ -7,9 +7,9 @@ Wants=network-online.target
 
 [Service]
 Environment=DAEMON_ARGS=
-EnvironmentFile=-/etc/default/%p
+EnvironmentFile=/etc/default/%p
 Type=notify
-User=<%= @user -%>
+User=<%= @user %>
 PermissionsStartOnly=true
 ExecStart=<%= @binary_location -%> gateway start --endpoints ${ETCD_GATEWAY_ENDPOINTS} --listen-addr ${ETCD_LISTEN_ADDR} $DAEMON_ARGS
 Restart=on-abnormal
