@@ -56,12 +56,14 @@ class etcd::config {
         mode    => '0644',
         content => template('etcd/etcd.config.erb'),
       }
-      file { '/etc/default/etcd-gateway':
-        ensure  => file,
-        owner   => $etcd::user,
-        group   => $etcd::group,
-        mode    => '0644',
-        content => template('etcd/etcd-gateway.config.erb'),
+      if $mode == 'gateway' {
+        file { '/etc/default/etcd-gateway':
+          ensure  => file,
+          owner   => $etcd::user,
+          group   => $etcd::group,
+          mode    => '0644',
+          content => template('etcd/etcd-gateway.config.erb'),
+        }
       }
     }
     default  : {
