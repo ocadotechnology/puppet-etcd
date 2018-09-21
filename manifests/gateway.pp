@@ -39,22 +39,22 @@ class etcd::gateway (
 
   # Set service status
   service {'etcd-gateway':
-    ensure   => $etcd::service_ensure,
-    enable   => $etcd::service_enable,
+    ensure => $etcd::service_ensure,
+    enable => $etcd::service_enable,
   }
 
   service {'etcd':
-    ensure   => stopped,
-    enable   => false,
+    ensure => stopped,
+    enable => false,
   }
 
 
   if $migration }
 
     exec {'etcd_service_type_migrate':
-      command     => '/bin/systemctl stop etcd.service ; /bin/systemctl start etcd-gateway.service',
-      provider    => 'shell',
-      onlyif      => '/bin/systemctl is-active etcd.service',
+      command  => '/bin/systemctl stop etcd.service ; /bin/systemctl start etcd-gateway.service',
+      provider => 'shell',
+      onlyif   => '/bin/systemctl is-active etcd.service',
     }
 
     Exec['etcd_service_type_migrate'] -> Service<| tag == 'etcd' |>
