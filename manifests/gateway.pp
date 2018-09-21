@@ -1,7 +1,7 @@
 # == Class etcd::gateway
 #
 class etcd::gateway (
-  Boolean   $migration = false,
+  Boolean   $migration = $::etcd_service_active,
 ) {
 
   $binary_location  = $etcd::binary_location
