@@ -60,7 +60,7 @@ class etcd (
 
   String                                          $peer_ca_file                = $etcd::params::etcd_peer_ca_file,
   String                                          $peer_cert_file              = $etcd::params::etcd_peer_cert_file,
-  String                                          $peer_key_file               = $etcd::params::etcd_peer_key_file
+  String                                          $peer_key_file               = $etcd::params::etcd_peer_key_file,
 
   Optional[String]                                $gateway_endpoints           = $etcd::params::gateway_endpoints,
   String                                          $gateway_listen_addr         = $etcd::params::gateway_listen_addr,
