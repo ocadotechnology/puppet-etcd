@@ -49,7 +49,7 @@ class etcd::gateway (
   }
 
 
-  if $migration }
+  if $migration {
 
     exec {'etcd_service_type_migrate':
       command  => '/bin/systemctl stop etcd.service ; /bin/systemctl start etcd-gateway.service',
