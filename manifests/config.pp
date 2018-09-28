@@ -27,6 +27,16 @@ class etcd::config {
   $peer_key_file                = $etcd::peer_key_file
   $proxy                        = $etcd::proxy
   $snapshot_count               = $etcd::snapshot_count
+  $gateway_endpoints            = $etcd::gateway_endpoints
+  $gateway_listen_addr          = $etcd::gateway_listen_addr
+
+
+  if $gateway_endpoints {
+    $_gateway_endpoints = $gateway_endpoints
+  } else {
+    $_gateway_endpoints = regsubst($initial_cluster, '(.*)=http(s)?://.*$', '\1:2379')
+  }
+
 
   case $::osfamily {
     'RedHat' : {
@@ -45,6 +55,15 @@ class etcd::config {
         group   => $etcd::group,
         mode    => '0644',
         content => template('etcd/etcd.config.erb'),
+      }
+      if $mode == 'gateway' {
+        file { '/etc/default/etcd-gateway':
+          ensure  => file,
+          owner   => $etcd::user,
+          group   => $etcd::group,
+          mode    => '0644',
+          content => template('etcd/etcd-gateway.config.erb'),
+        }
       }
     }
     default  : {

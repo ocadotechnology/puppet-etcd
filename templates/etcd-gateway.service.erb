@@ -1,0 +1,20 @@
+[Unit]
+Description=etcd gateway - simple TCP proxy that forwards back to the cluster
+Documentation=https://github.com/coreos/etcd
+Documentation=man:etcd
+After=network.target
+Wants=network-online.target
+
+[Service]
+Environment=DAEMON_ARGS=
+EnvironmentFile=/etc/default/%p
+Type=notify
+User=<%= @user %>
+PermissionsStartOnly=true
+ExecStart=<%= @binary_location -%> gateway start --endpoints ${ETCD_GATEWAY_ENDPOINTS} --listen-addr ${ETCD_LISTEN_ADDR} $DAEMON_ARGS
+Restart=on-abnormal
+#RestartSec=10s
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
